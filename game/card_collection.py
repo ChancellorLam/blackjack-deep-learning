@@ -6,9 +6,8 @@ class CardCollection(ABC):
     def __init__(self):
         self.cards = []
 
-    @abstractmethod
     def get_top_card(self):
-        pass
+        return self.cards[0]
 
     @abstractmethod
     def shuffle(self):
