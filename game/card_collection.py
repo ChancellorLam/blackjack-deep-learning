@@ -17,7 +17,3 @@ class CardCollection(ABC):
 
     def shuffle(self):
         random.shuffle(self.cards)
-
-    def _validate_card(self, card):
-        if not isinstance(card, Card):
-            raise TypeError('Only card objects can be added to CardCollection')
