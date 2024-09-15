@@ -1,5 +1,4 @@
 from abc import ABC
-from game.card import Card
 import random
 
 
