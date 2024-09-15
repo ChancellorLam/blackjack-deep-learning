@@ -1,6 +1,4 @@
 from game.card_collection import CardCollection
-from game.card_shoe import CardShoe
-
 
 class Hand(CardCollection):
 
