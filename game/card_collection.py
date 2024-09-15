@@ -1,5 +1,6 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from game.card import Card
+import random
 
 
 class CardCollection(ABC):
@@ -9,9 +10,8 @@ class CardCollection(ABC):
     def get_top_card(self):
         return self.cards[0]
 
-    @abstractmethod
     def shuffle(self):
-        pass
+        random.shuffle(self.cards)
 
     def _validate_card(self, card):
         if not isinstance(card, Card):
