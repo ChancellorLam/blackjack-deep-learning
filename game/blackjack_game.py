@@ -1,4 +1,4 @@
-from game.hand import Hand
+from blackjack_entities.hand import Hand
 
 
 class BlackjackGame:

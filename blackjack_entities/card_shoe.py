@@ -1,5 +1,5 @@
-from game.card import Card
-from game.card_collection import CardCollection
+from blackjack_entities.card import Card
+from blackjack_entities.card_collection import CardCollection
 
 
 class CardShoe(CardCollection):

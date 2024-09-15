@@ -1,4 +1,4 @@
-from game.card_collection import CardCollection
+from blackjack_entities.card_collection import CardCollection
 
 class Hand(CardCollection):
 
