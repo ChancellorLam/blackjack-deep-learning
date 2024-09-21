@@ -1,3 +1,4 @@
 .idea
 .venv
 game/__pycache__
+blackjack_entities/__pycache__
