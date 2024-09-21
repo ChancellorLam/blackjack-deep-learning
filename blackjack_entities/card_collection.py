@@ -11,6 +11,9 @@ class CardCollection(ABC):
         formatted_output = "[" + ", ".join(cards) + "]"
         return formatted_output
 
+    def __len__(self):
+        return len(self.cards)
+
     def get_top_card(self):
         return self.cards[0]
 
