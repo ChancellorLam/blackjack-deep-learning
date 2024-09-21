@@ -1,9 +1,9 @@
-from blackjack_entities.card_shoe import CardShoe
+from blackjack_entities.deck import Deck
 
 
 class GameManager:
     def __init__(self):
         player_money = 500
         current_bet = 15
-        card_shoe = CardShoe()
+        game_deck = Deck()
 
