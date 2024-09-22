@@ -14,6 +14,12 @@ class CardCollection(ABC):
     def __len__(self):
         return len(self.cards)
 
+    def add_card(self, card):
+        self.cards.append(card)
+
+    def pop_left_card(self):
+        return self.cards.pop(0)
+
     def get_top_card(self):
         return self.cards[0]
 
