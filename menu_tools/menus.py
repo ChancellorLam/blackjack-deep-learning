@@ -12,4 +12,4 @@ def selection_menu(prompt, options):
             else:
                 raise ValueError
         except ValueError:
-            print("Invalid input. You must make a choice from 0 to " + str(len(options) - 1))
+            print("Invalid input. You must make a choice from 0 to " + str(len(options)) + ".")

@@ -15,15 +15,15 @@ class BlackjackGame:
         return selection_menu(prompt, decisions)
 
     def construct_prompt_based_on_game_state(self):
-        prompt = "Would you like to Hit"
-        decisions = ["Stand"]
+        prompt = "Would you like to "
+        decisions = ["Hit", "Stand"]
         if self.turn == 0:
             decisions.append("Double")
             if self.player_hands[0].can_split():
                 decisions.append("Split")
 
-        if len(decisions) == 1:
-            return f"{prompt} or {decisions[0]}?", decisions
+        if len(decisions) == 2:
+            return f"{prompt}{decisions[0]} or {decisions[1]}?", decisions
 
         # Join decisions with commas and 'or' for the last item
-        return f"{prompt}, " + ", ".join(decisions[:-1]) + f", or {decisions[-1]}?", decisions
+        return f"{prompt}{', '.join(decisions[:-1])}, or {decisions[-1]}?", decisions

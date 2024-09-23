@@ -1,5 +1,4 @@
 from blackjack_entities.deck import Deck
-from game.blackjack_game import BlackjackGame
 
 class GameManager:
     def __init__(self):
