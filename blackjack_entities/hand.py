@@ -19,3 +19,6 @@ class Hand(CardCollection):
         if num_aces > 0 and higher_sum - 10 > 0:
             lower_sum = higher_sum - 10
         return [lower_sum, higher_sum]
+
+    def can_split(self):
+        return self.cards[0].get_card() == self.cards[1].get_card()
