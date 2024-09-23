@@ -1,4 +1,5 @@
 from blackjack_entities.deck import Deck
+from game.blackjack_game import BlackjackGame
 
 class GameManager:
     def __init__(self):
@@ -11,6 +12,5 @@ class GameManager:
 
     def deal_starting_cards(self, current_game):
         for i in range(0, 2):
-            for first_hand in current_game.player_hands.values():
-                first_hand[0].add_card(self.game_deck.pop_left_card())
+            current_game.player_hands[0].add_card(self.game_deck.pop_left_card())
             current_game.dealer_hand.add_card(self.game_deck.pop_left_card())
