@@ -53,6 +53,7 @@ class BlackjackGame:
         self.hit(hand, game_deck)
 
     def construct_prompt_based_on_game_state(self):
+        self.print_game_state()
         prompt = "Would you like to "
         decisions = ["Hit", "Stand"]
         if self.turn == 0:
