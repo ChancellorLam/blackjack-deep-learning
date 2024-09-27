@@ -8,6 +8,19 @@ class BlackjackGame:
         self.player_hands = [Hand()]
         self.turn = 0
 
+    def play_player_hand(self, hand, game_deck):
+        while not hand.is_bust():
+            choice = self.get_player_choice()
+            if choice == 1:
+                self.hit(hand, game_deck)
+            elif choice == 2:
+                self.stand()
+            elif choice == 3:
+                self.double(hand, game_deck)
+            elif choice == 4:
+                print("Split is not currently supported.")
+            self.turn = self.turn + 1
+
     def deal_starting_cards(self, game_deck):
         for i in range(0, 2):
             self.player_hands[0].add_card(game_deck.pop_left_card())
