@@ -41,6 +41,16 @@ class BlackjackGame:
         decisions = choice_and_possible_decisions[1]
         return selection_menu(choice, decisions)
 
+    def hit(self, hand, game_deck):
+        hand.add_card(game_deck.pop_left_card())
+        self.print_game_state()
+
+    def stand(self):
+        print("Standing...")
+
+    def double(self, hand, game_deck):
+        self.hit(hand, game_deck)
+
     def construct_prompt_based_on_game_state(self):
         prompt = "Would you like to "
         decisions = ["Hit", "Stand"]
