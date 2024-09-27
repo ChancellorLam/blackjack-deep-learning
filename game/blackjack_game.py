@@ -14,8 +14,6 @@ class BlackjackGame:
             self.dealer_hand.add_card(game_deck.pop_left_card())
 
     def check_and_print_blackjack_results(self):
-        print("Dealer's Hand: " + str(self.dealer_hand))
-
         dealer_has_blackjack = self.dealer_hand.has_blackjack()
         player_has_blackjack = self.player_hands[0].has_blackjack()
 
@@ -27,6 +25,15 @@ class BlackjackGame:
             print("Dealer has Blackjack! You lose!")
 
         return dealer_has_blackjack, player_has_blackjack
+
+    def print_game_state(self):
+        print(f"Dealer's Hand: {self.dealer_hand}")
+        print(f"Player's Hand: {self.player_hands[0]}")
+        lower_sum, higher_sum = self.player_hands[0].sum_hand()
+        if lower_sum == higher_sum:
+            print(f"Your hand value is: {higher_sum}")
+        else:
+            print(f"Your hand value is: {lower_sum}/{higher_sum}")
 
     def get_player_decision(self):
         prompt_with_decisions = self.construct_prompt_based_on_game_state()
