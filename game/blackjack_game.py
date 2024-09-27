@@ -8,6 +8,26 @@ class BlackjackGame:
         self.player_hands = [Hand()]
         self.turn = 0
 
+    def deal_starting_cards(self, game_deck):
+        for i in range(0, 2):
+            self.player_hands[0].add_card(game_deck.pop_left_card())
+            self.dealer_hand.add_card(game_deck.pop_left_card())
+
+    def check_and_print_blackjack_results(self):
+        print("Dealer's Hand: " + str(self.dealer_hand))
+
+        dealer_has_blackjack = self.dealer_hand.has_blackjack()
+        player_has_blackjack = self.player_hands[0].has_blackjack()
+
+        if player_has_blackjack and dealer_has_blackjack:
+            print("Push!")
+        elif player_has_blackjack:
+            print("Player Blackjack! You win!")
+        elif dealer_has_blackjack:
+            print("Dealer has Blackjack! You lose!")
+
+        return dealer_has_blackjack, player_has_blackjack
+
     def get_player_decision(self):
         prompt_with_decisions = self.construct_prompt_based_on_game_state()
         prompt = prompt_with_decisions[0]
