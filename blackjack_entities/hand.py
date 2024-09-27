@@ -25,3 +25,7 @@ class Hand(CardCollection):
 
     def has_blackjack(self):
         return self.cards[0].get_value() + self.cards[1].get_value() == 21
+
+    def is_bust(self):
+        lower_sum, higher_sum = self.sum_hand()
+        return lower_sum > 21
