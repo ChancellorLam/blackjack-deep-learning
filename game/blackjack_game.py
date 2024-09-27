@@ -17,6 +17,7 @@ class BlackjackGame:
         dealer_has_blackjack = self.dealer_hand.has_blackjack()
         player_has_blackjack = self.player_hands[0].has_blackjack()
 
+        self.print_game_state()
         if player_has_blackjack and dealer_has_blackjack:
             print("Push!")
         elif player_has_blackjack:
