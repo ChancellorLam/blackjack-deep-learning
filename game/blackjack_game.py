@@ -35,11 +35,11 @@ class BlackjackGame:
         else:
             print(f"Your hand value is: {lower_sum}/{higher_sum}")
 
-    def get_player_decision(self):
-        prompt_with_decisions = self.construct_prompt_based_on_game_state()
-        prompt = prompt_with_decisions[0]
-        decisions = prompt_with_decisions[1]
-        return selection_menu(prompt, decisions)
+    def get_player_choice(self):
+        choice_and_possible_decisions = self.construct_prompt_based_on_game_state()
+        choice = choice_and_possible_decisions[0]
+        decisions = choice_and_possible_decisions[1]
+        return selection_menu(choice, decisions)
 
     def construct_prompt_based_on_game_state(self):
         prompt = "Would you like to "
