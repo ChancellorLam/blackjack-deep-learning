@@ -43,11 +43,12 @@ class BlackjackGame:
     def print_game_state(self):
         print(f"Dealer's Hand: {self.dealer_hand}")
         print(f"Player's Hand: {self.player_hands[0]}")
-        lower_sum, higher_sum = self.player_hands[0].sum_hand()
-        if lower_sum == higher_sum:
-            print(f"Your hand value is: {higher_sum}")
-        else:
-            print(f"Your hand value is: {lower_sum}/{higher_sum}")
+
+        hand_value = self.player_hands[0].sum_hand()
+        if isinstance(hand_value, int):
+            print(f"Your hand value is: {hand_value}")
+        elif isinstance(hand_value, tuple) and len(hand_value) == 2:
+            print(f"Your hand value is: {hand_value[0]}/{hand_value[1]}")
 
     def get_player_choice(self):
         choice_and_possible_decisions = self.construct_prompt_based_on_game_state()
