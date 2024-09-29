@@ -41,7 +41,7 @@ class BlackjackGame:
         return dealer_has_blackjack, player_has_blackjack
 
     def print_game_state(self):
-        print(f"Dealer's Hand: {self.dealer_hand}")
+        print(f"Dealer's Upcard: {self.dealer_hand.get_top_card()}")
         print(f"Player's Hand: {self.player_hands[0]}")
 
         hand_value = self.player_hands[0].sum_hand()
