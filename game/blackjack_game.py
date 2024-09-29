@@ -21,6 +21,23 @@ class BlackjackGame:
                 print("Split is not currently supported.")
             self.turn = self.turn + 1
 
+    def play_dealer_hand(self, game_deck, player_value):
+        while self.dealer_hand.sum_hand() < 17:
+            self.hit(self.dealer_hand, game_deck)
+            print(f"Dealer hits.\nDealer Hand: {self.dealer_hand}")
+
+        dealer_value = self.dealer_hand.sum_hand()
+        print(f"Dealer final hand value: {dealer_value}")
+        if dealer_value > 21:
+            print("Dealer busts! You win!")
+        else:
+            if dealer_value > player_value:
+                print("Dealer wins!")
+            elif dealer_value < player_value:
+                print("You win!")
+            else:
+                print("Push!")
+
     def deal_starting_cards(self, game_deck):
         for i in range(0, 2):
             self.player_hands[0].add_card(game_deck.pop_left_card())
