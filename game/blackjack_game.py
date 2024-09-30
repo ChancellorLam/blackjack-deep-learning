@@ -3,23 +3,32 @@ from menu_tools.menus import selection_menu
 
 
 class BlackjackGame:
-    def __init__(self):
+    def __init__(self, current_bet):
         self.dealer_hand = Hand()
-        self.player_hands = [Hand()]
+        self.player_hands = [Hand(current_bet)]
         self.turn = 0
 
-    def play_player_hand(self, hand, game_deck):
-        while not hand.is_bust():
-            choice = self.get_player_choice()
-            if choice == 1:
-                self.hit(hand, game_deck)
-            elif choice == 2:
-                self.stand()
-            elif choice == 3:
-                self.double(hand, game_deck)
-            elif choice == 4:
-                print("Split is not currently supported.")
-            self.turn = self.turn + 1
+    def play_player_hand(self, hand, game_deck, index):
+        player_still_playing = True
+
+        while player_still_playing:
+            if self.player_hands[index].is_bust() or self.player_hands[index].sum_hand(hard_sum_only=True) == 21:
+                player_still_playing = False
+            else:
+                choice = self.get_player_choice()
+                if choice == 1:
+                    self.hit(hand, game_deck)
+                elif choice == 2:
+                    print("Standing...")
+                    player_still_playing = False
+                elif choice == 3:
+                    print("Doubling...")
+                    self.hit(hand, game_deck)
+                    self.player_hands[index].double_bet()
+                    player_still_playing = False
+                elif choice == 4:
+                    print("Split is not currently supported.")
+                self.turn = self.turn + 1
 
     def play_dealer_hand(self, game_deck):
         while self.dealer_hand.sum_hand() < 17:
@@ -78,12 +87,6 @@ class BlackjackGame:
     def hit(self, hand, game_deck):
         hand.add_card(game_deck.pop_left_card())
         self.print_game_state()
-
-    def stand(self):
-        print("Standing...")
-
-    def double(self, hand, game_deck):
-        self.hit(hand, game_deck)
 
     def construct_prompt_based_on_game_state(self):
         self.print_game_state()
