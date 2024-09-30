@@ -35,8 +35,8 @@ class BlackjackGame:
             self.hit(self.dealer_hand, game_deck)
             print(f"Dealer hits.\nDealer Hand: {self.dealer_hand}")
 
-    def evaluate_winner(self, hand_index):
-        player_value = self.player_hands[hand_index]
+    def generate_result_message(self, hand_index):
+        player_value = self.player_hands[hand_index].sum_hand(hard_sum_only=True)
         dealer_value = self.dealer_hand.sum_hand()
 
         if dealer_value > 21:
