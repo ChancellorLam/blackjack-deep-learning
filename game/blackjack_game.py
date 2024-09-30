@@ -54,19 +54,8 @@ class BlackjackGame:
             self.player_hands[0].add_card(game_deck.pop_left_card())
             self.dealer_hand.add_card(game_deck.pop_left_card())
 
-    def check_and_print_blackjack_results(self):
-        dealer_has_blackjack = self.dealer_hand.has_blackjack()
-        player_has_blackjack = self.player_hands[0].has_blackjack()
-
-        self.print_game_state()
-        if player_has_blackjack and dealer_has_blackjack:
-            print("Push!")
-        elif player_has_blackjack:
-            print("Player Blackjack! You win!")
-        elif dealer_has_blackjack:
-            print("Dealer has Blackjack! You lose!")
-
-        return dealer_has_blackjack, player_has_blackjack
+    def get_blackjack_results(self):
+        return self.dealer_hand.has_blackjack(), self.player_hands[0].has_blackjack()
 
     def print_game_state(self):
         print(f"Dealer's Upcard: {self.dealer_hand.get_top_card()}")
