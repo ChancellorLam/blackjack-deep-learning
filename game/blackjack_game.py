@@ -8,6 +8,37 @@ class BlackjackGame:
         self.player_hands = [Hand(current_bet)]
         self.turn = 0
 
+    def play_single_blackjack_game(self, game_deck, blackjack_ratio):
+        self.deal_starting_cards(game_deck)
+        dealer_has_blackjack, player_has_blackjack = self.get_blackjack_results()
+
+        if dealer_has_blackjack and player_has_blackjack:
+            print("Push!")
+            return [self.player_hands[0].bet]
+        elif dealer_has_blackjack:
+            print("Dealer has Blackjack! You lose!")
+            return [0]
+        elif player_has_blackjack:
+            print("Player Blackjack! You win!")
+            return [(self.player_hands[0].bet * blackjack_ratio) + self.player_hands[0].bet]
+
+        for hand in self.player_hands:
+            self.play_player_hand(hand, game_deck)
+
+        self.play_dealer_hand(game_deck)
+        print(f"Dealer final hand: {self.dealer_hand}")
+        print(f"Dealer final hand value: {self.dealer_hand.sum_hand()}")
+
+        if len(self.player_hands) == 1:
+            print(self.generate_result_message(self.player_hands[0]))
+            return self.get_game_result(self.player_hands[0])
+
+        player_payouts = []
+        for index, hand in enumerate(self.player_hands):
+            print(f"Hand {index + 1}: {self.generate_result_message(hand)}")
+            player_payouts.append(self.get_game_result(hand))
+        return player_payouts
+
     def play_player_hand(self, hand, game_deck):
         player_still_playing = True
 
