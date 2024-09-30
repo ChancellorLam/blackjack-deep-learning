@@ -1,4 +1,6 @@
 from blackjack_entities.deck import Deck
+from game.blackjack_game import BlackjackGame
+
 
 class GameManager:
     def __init__(self):
@@ -8,3 +10,9 @@ class GameManager:
 
     def load_game_deck_with_standard_decks(self, num_decks):
         self.game_deck.add_standard_decks(num_decks)
+
+    def continuously_play_blackjack(self):
+        self.load_game_deck_with_standard_decks(8)
+        while True:
+            game = BlackjackGame(self.current_bet)
+            game.play_single_blackjack_game(self.game_deck, (3 / 2))
