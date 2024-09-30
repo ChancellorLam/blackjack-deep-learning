@@ -8,11 +8,11 @@ class BlackjackGame:
         self.player_hands = [Hand(current_bet)]
         self.turn = 0
 
-    def play_player_hand(self, hand, game_deck, index):
+    def play_player_hand(self, hand, game_deck):
         player_still_playing = True
 
         while player_still_playing:
-            if self.player_hands[index].is_bust() or self.player_hands[index].sum_hand(hard_sum_only=True) == 21:
+            if hand.is_bust() or hand.sum_hand(hard_sum_only=True) == 21:
                 player_still_playing = False
             else:
                 choice = self.get_player_choice()
@@ -24,7 +24,7 @@ class BlackjackGame:
                 elif choice == 3:
                     print("Doubling...")
                     self.hit(hand, game_deck)
-                    self.player_hands[index].double_bet()
+                    hand.double_bet()
                     player_still_playing = False
                 elif choice == 4:
                     print("Split is not currently supported.")
