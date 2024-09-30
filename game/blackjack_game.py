@@ -49,6 +49,20 @@ class BlackjackGame:
             else:
                 return "Push!"
 
+    def get_game_result(self, hand):
+        player_value = hand.sum_hand(hard_sum_only=True)
+        dealer_value = self.dealer_hand.sum_hand()
+
+        if dealer_value > 21:
+            return hand.bet * 2
+        else:
+            if dealer_value > player_value:
+                return 0
+            elif dealer_value < player_value:
+                return hand.bet * 2
+            else:
+                return hand.bet
+
     def deal_starting_cards(self, game_deck):
         for i in range(0, 2):
             self.player_hands[0].add_card(game_deck.pop_left_card())
