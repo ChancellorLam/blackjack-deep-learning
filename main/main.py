@@ -1,7 +1,6 @@
-
-def print_hi(name):
-    print(f'Hi, {name}')
+from game.game_manager import GameManager
 
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    game_manager = GameManager()
+    game_manager.continuously_play_blackjack()
 
