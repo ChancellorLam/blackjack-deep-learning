@@ -21,7 +21,7 @@ class CardCollection(ABC):
         return self.cards.pop(0)
 
     def get_top_card(self):
-        return self.cards[0]
+        return self.cards[0].get_card()
 
     def shuffle(self):
         random.shuffle(self.cards)
