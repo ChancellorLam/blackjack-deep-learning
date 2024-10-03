@@ -1,5 +1,6 @@
 from blackjack_entities.hand import Hand
 from menu_tools.menus import selection_menu
+import time
 
 
 class BlackjackGame:
@@ -12,22 +13,23 @@ class BlackjackGame:
         self.deal_starting_cards(game_deck)
         dealer_has_blackjack, player_has_blackjack = self.get_blackjack_results()
 
-        if dealer_has_blackjack and player_has_blackjack:
-            print("Push!")
-            return [self.player_hands[0].bet]
-        elif dealer_has_blackjack:
-            print("Dealer has Blackjack! You lose!")
-            return [0]
-        elif player_has_blackjack:
-            print("Player Blackjack! You win!")
-            return [(self.player_hands[0].bet * blackjack_ratio) + self.player_hands[0].bet]
+        if any((dealer_has_blackjack, player_has_blackjack)):
+            self.print_game_state(reveal_dealer_hand=True)
+            time.sleep(2)
+            if dealer_has_blackjack and player_has_blackjack:
+                print("Push!")
+                return [self.player_hands[0].bet]
+            elif dealer_has_blackjack:
+                print("Dealer has Blackjack! You lose!")
+                return [0]
+            elif player_has_blackjack:
+                print("Player Blackjack! You win!")
+                return [(self.player_hands[0].bet * blackjack_ratio) + self.player_hands[0].bet]
 
         for hand in self.player_hands:
             self.play_player_hand(hand, game_deck)
 
         self.play_dealer_hand(game_deck)
-        print(f"Dealer final hand: {self.dealer_hand}")
-        print(f"Dealer final hand value: {self.dealer_hand.sum_hand()}")
 
         if len(self.player_hands) == 1:
             print(self.generate_result_message(self.player_hands[0]))
@@ -43,34 +45,52 @@ class BlackjackGame:
         player_still_playing = True
 
         while player_still_playing:
-            if hand.is_bust() or hand.sum_hand(hard_sum_only=True) == 21:
+            if hand.is_bust():
+                print("Bust! Dealer wins!")
                 player_still_playing = False
+                time.sleep(2)
+            elif hand.sum_hand(hard_sum_only=True) == 21:
+                player_still_playing = False
+                time.sleep(2)
             else:
                 choice = self.get_player_choice()
                 if choice == 1:
                     self.hit(hand, game_deck)
                 elif choice == 2:
-                    print("Standing...")
+                    print("Standing...\n")
                     player_still_playing = False
                 elif choice == 3:
-                    print("Doubling...")
+                    print("Doubling...\n")
                     self.hit(hand, game_deck)
                     hand.double_bet()
                     player_still_playing = False
                 elif choice == 4:
                     print("Split is not currently supported.")
+
+                if player_still_playing:
+                    self.print_game_state()
                 self.turn = self.turn + 1
 
     def play_dealer_hand(self, game_deck):
-        while self.dealer_hand.sum_hand() < 17:
-            self.hit(self.dealer_hand, game_deck)
-            print(f"Dealer hits.\nDealer Hand: {self.dealer_hand}")
+        if self.dealer_hand.sum_hand(hard_sum_only=True) >= 17:
+            self.print_game_state(reveal_dealer_hand=True)
+        else:
+            self.print_game_state(reveal_dealer_hand=True)
+            time.sleep(2)
+            while self.dealer_hand.sum_hand(hard_sum_only=True) < 17:
+                self.hit(self.dealer_hand, game_deck)
+                print(f"Dealer hits.")
+                self.print_game_state(reveal_dealer_hand=True)
+                if not self.dealer_hand.is_bust():
+                    time.sleep(2)
+        print(f"Dealer final hand value: {self.dealer_hand.sum_hand(hard_sum_only=True)}")
 
     def generate_result_message(self, hand):
         player_value = hand.sum_hand(hard_sum_only=True)
-        dealer_value = self.dealer_hand.sum_hand()
-
-        if dealer_value > 21:
+        dealer_value = self.dealer_hand.sum_hand(hard_sum_only=True)
+        if player_value > 21:
+            return ""
+        elif dealer_value > 21:
             return "Dealer busts! You win!"
         else:
             if dealer_value > player_value:
@@ -82,9 +102,11 @@ class BlackjackGame:
 
     def get_game_result(self, hand):
         player_value = hand.sum_hand(hard_sum_only=True)
-        dealer_value = self.dealer_hand.sum_hand()
+        dealer_value = self.dealer_hand.sum_hand(hard_sum_only=True)
 
-        if dealer_value > 21:
+        if player_value > 21:
+            return 0
+        elif dealer_value > 21:
             return hand.bet * 2
         else:
             if dealer_value > player_value:
@@ -102,8 +124,11 @@ class BlackjackGame:
     def get_blackjack_results(self):
         return self.dealer_hand.has_blackjack(), self.player_hands[0].has_blackjack()
 
-    def print_game_state(self):
-        print(f"Dealer's Upcard: {self.dealer_hand.get_top_card()}")
+    def print_game_state(self, reveal_dealer_hand=False):
+        if reveal_dealer_hand:
+            print(f"Dealer's Hand: {self.dealer_hand}")
+        else:
+            print(f"Dealer's Upcard: [{self.dealer_hand.get_top_card()}]")
         print(f"Player's Hand: {self.player_hands[0]}")
 
         hand_value = self.player_hands[0].sum_hand()
@@ -111,6 +136,7 @@ class BlackjackGame:
             print(f"Your hand value is: {hand_value}")
         elif isinstance(hand_value, tuple) and len(hand_value) == 2:
             print(f"Your hand value is: {hand_value[0]}/{hand_value[1]}")
+        print()
 
     def get_player_choice(self):
         choice_and_possible_decisions = self.construct_prompt_based_on_game_state()
@@ -118,9 +144,9 @@ class BlackjackGame:
         decisions = choice_and_possible_decisions[1]
         return selection_menu(choice, decisions)
 
-    def hit(self, hand, game_deck):
+    @classmethod
+    def hit(cls, hand, game_deck):
         hand.add_card(game_deck.pop_left_card())
-        self.print_game_state()
 
     def construct_prompt_based_on_game_state(self):
         self.print_game_state()
