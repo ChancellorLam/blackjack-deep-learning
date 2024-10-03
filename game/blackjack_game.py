@@ -33,13 +33,15 @@ class BlackjackGame:
 
         if len(self.player_hands) == 1:
             print(self.generate_result_message(self.player_hands[0]))
-            return self.get_game_result(self.player_hands[0])
+            return [self.get_game_result(self.player_hands[0])], [self.player_hands[0].bet]
 
         player_payouts = []
+        costs = []
         for index, hand in enumerate(self.player_hands):
             print(f"Hand {index + 1}: {self.generate_result_message(hand)}")
             player_payouts.append(self.get_game_result(hand))
-        return player_payouts
+            costs.append(hand.bet)
+        return player_payouts, costs
 
     def play_player_hand(self, hand, game_deck):
         player_still_playing = True
@@ -63,6 +65,8 @@ class BlackjackGame:
                     print("Doubling...\n")
                     self.hit(hand, game_deck)
                     hand.double_bet()
+                    if hand.is_bust():
+                        print("Bust! Dealer wins!")
                     player_still_playing = False
                 elif choice == 4:
                     print("Split is not currently supported.")
@@ -89,7 +93,7 @@ class BlackjackGame:
         player_value = hand.sum_hand(hard_sum_only=True)
         dealer_value = self.dealer_hand.sum_hand(hard_sum_only=True)
         if player_value > 21:
-            return ""
+            return "Dealer wins!"
         elif dealer_value > 21:
             return "Dealer busts! You win!"
         else:
