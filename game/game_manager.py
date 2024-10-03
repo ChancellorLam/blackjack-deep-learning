@@ -13,6 +13,8 @@ class GameManager:
 
     def continuously_play_blackjack(self):
         self.load_game_deck_with_standard_decks(8)
+        self.game_deck.shuffle()
         while True:
             game = BlackjackGame(self.current_bet)
             game.play_single_blackjack_game(self.game_deck, (3 / 2))
+            input("Press Enter to Continue.\n")
