@@ -20,7 +20,7 @@ class GameManager:
             self.player_money = self.player_money - self.current_bet
             print(f"You now have: {self.player_money}\n")
             game = BlackjackGame(self.current_bet)
-            payouts, costs = game.play_single_blackjack_game(self.game_deck, self.player_money, (3 / 2))
+            payouts, costs = game.play_single_blackjack_game(self.game_deck, (3 / 2))
             for payout in payouts:
                 self.player_money = self.player_money + payout
             self.player_money = self.player_money + self.current_bet
