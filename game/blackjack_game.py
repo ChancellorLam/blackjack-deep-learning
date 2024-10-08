@@ -18,13 +18,13 @@ class BlackjackGame:
             time.sleep(2)
             if dealer_has_blackjack and player_has_blackjack:
                 print("Push!")
-                return [self.player_hands[0].bet]
+                return [0], [0]
             elif dealer_has_blackjack:
                 print("Dealer has Blackjack! You lose!")
-                return [0]
+                return [self.player_hands[0].bet * -1], [0]
             elif player_has_blackjack:
                 print("Player Blackjack! You win!")
-                return [(self.player_hands[0].bet * blackjack_ratio) + self.player_hands[0].bet]
+                return [(self.player_hands[0].bet * blackjack_ratio)], [0]
 
         for hand in self.player_hands:
             self.play_player_hand(hand, game_deck)
