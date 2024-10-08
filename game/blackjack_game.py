@@ -26,8 +26,10 @@ class BlackjackGame:
                 print("Player Blackjack! You win!")
                 return [(self.player_hands[0].bet * blackjack_ratio)], [0]
 
-        for hand in self.player_hands:
-            self.play_player_hand(hand, game_deck)
+        i = 0
+        while i < len(self.player_hands):
+            self.play_player_hand(self.player_hands[i], game_deck, i)
+            i = i + 1
 
         self.play_dealer_hand(game_deck)
 
@@ -43,7 +45,7 @@ class BlackjackGame:
             costs.append(hand.bet)
         return player_payouts, costs
 
-    def play_player_hand(self, hand, game_deck):
+    def play_player_hand(self, hand, game_deck, i):
         player_still_playing = True
 
         while player_still_playing:
@@ -55,7 +57,7 @@ class BlackjackGame:
                 player_still_playing = False
                 time.sleep(2)
             else:
-                choice = self.get_player_choice()
+                choice = self.get_player_choice(i)
                 if choice == 1:
                     self.hit(hand, game_deck)
                 elif choice == 2:
@@ -69,10 +71,14 @@ class BlackjackGame:
                         print("Bust! Dealer wins!")
                     player_still_playing = False
                 elif choice == 4:
-                    print("Split is not currently supported.")
+                    new_hand = Hand(hand.bet)
+                    new_hand.add_card(hand.pop_left_card())
+                    self.hit(hand, game_deck)
+                    self.hit(new_hand, game_deck)
+                    self.player_hands.append(new_hand)
 
                 if player_still_playing:
-                    self.print_game_state()
+                    self.print_game_state(hand_index=i)
                 self.turn = self.turn + 1
 
     def play_dealer_hand(self, game_deck):
@@ -128,22 +134,32 @@ class BlackjackGame:
     def get_blackjack_results(self):
         return self.dealer_hand.has_blackjack(), self.player_hands[0].has_blackjack()
 
-    def print_game_state(self, reveal_dealer_hand=False):
+    def print_game_state(self, reveal_dealer_hand=False, hand_index=0):
         if reveal_dealer_hand:
             print(f"Dealer's Hand: {self.dealer_hand}")
         else:
             print(f"Dealer's Upcard: [{self.dealer_hand.get_top_card()}]")
-        print(f"Player's Hand: {self.player_hands[0]}")
 
-        hand_value = self.player_hands[0].sum_hand()
-        if isinstance(hand_value, int):
-            print(f"Your hand value is: {hand_value}")
-        elif isinstance(hand_value, tuple) and len(hand_value) == 2:
-            print(f"Your hand value is: {hand_value[0]}/{hand_value[1]}")
+        if len(self.player_hands) == 1:
+            print(f"Player's Hand: {self.player_hands[0]}")
+            hand_value = self.player_hands[hand_index].sum_hand()
+            if isinstance(hand_value, int):
+                print(f"Your hand value is: {hand_value}")
+            elif isinstance(hand_value, tuple) and len(hand_value) == 2:
+                print(f"Your hand value is: {hand_value[0]}/{hand_value[1]}")
+        else:
+            for index, hand in enumerate(self.player_hands):
+                print(f"Player Hand {index}: {self.player_hands[index]}")
+            for index, hand in enumerate(self.player_hands):
+                hand_value = hand.sum_hand()
+                if isinstance(hand_value, int):
+                    print(f"Hand {index} Value: {hand_value}")
+                elif isinstance(hand_value, tuple) and len(hand_value) == 2:
+                    print(f"Hand {index} Value: {hand_value[0]}/{hand_value[1]}")
         print()
 
-    def get_player_choice(self):
-        choice_and_possible_decisions = self.construct_prompt_based_on_game_state()
+    def get_player_choice(self, hand_index):
+        choice_and_possible_decisions = self.construct_prompt_based_on_game_state(hand_index)
         choice = choice_and_possible_decisions[0]
         decisions = choice_and_possible_decisions[1]
         return selection_menu(choice, decisions)
@@ -152,8 +168,8 @@ class BlackjackGame:
     def hit(cls, hand, game_deck):
         hand.add_card(game_deck.pop_left_card())
 
-    def construct_prompt_based_on_game_state(self):
-        self.print_game_state()
+    def construct_prompt_based_on_game_state(self, i):
+        self.print_game_state(hand_index=i)
         prompt = "Would you like to "
         decisions = ["Hit", "Stand"]
         if self.turn == 0:
@@ -161,8 +177,12 @@ class BlackjackGame:
             if self.player_hands[0].can_split():
                 decisions.append("Split")
 
+        specific_hand = ""
+        if len(self.player_hands) > 1:
+            specific_hand = f" for Hand {i}"
+
         if len(decisions) == 2:
-            return f"{prompt}{decisions[0]} or {decisions[1]}?", decisions
+            return f"{prompt}{decisions[0]} or {decisions[1]}{specific_hand}?", decisions
 
         # Join decisions with commas and 'or' for the last item
-        return f"{prompt}{', '.join(decisions[:-1])}, or {decisions[-1]}?", decisions
+        return f"{prompt}{', '.join(decisions[:-1])}, or {decisions[-1]}{specific_hand}?", decisions

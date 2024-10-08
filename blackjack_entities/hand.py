@@ -28,7 +28,7 @@ class Hand(CardCollection):
         return hard_sum
 
     def can_split(self):
-        return self.cards[0].get_card() == self.cards[1].get_card()
+        return self.cards[0].get_value() == self.cards[1].get_value()
 
     def has_blackjack(self):
         return self.cards[0].get_value() + self.cards[1].get_value() == 21
