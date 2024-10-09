@@ -93,9 +93,7 @@ class BlackjackGame:
                 self.turn = self.turn + 1
 
     def play_dealer_hand(self, game_deck):
-        if self.dealer_hand.sum_hand(hard_sum_only=True) >= 17:
-            self.print_game_state(reveal_dealer_hand=True)
-        else:
+        if self.dealer_hand.sum_hand(hard_sum_only=True) < 17:
             self.print_game_state(reveal_dealer_hand=True)
             time.sleep(2)
             while self.dealer_hand.sum_hand(hard_sum_only=True) < 17:
@@ -104,6 +102,13 @@ class BlackjackGame:
                 self.print_game_state(reveal_dealer_hand=True)
                 if not self.dealer_hand.is_bust():
                     time.sleep(2)
+        elif self.dealer_hand.is_bust():
+            print(f"Dealer busts!")
+            self.print_game_state(reveal_dealer_hand=True)
+        else:
+            print(f"Dealer stands.")
+            self.print_game_state(reveal_dealer_hand=True)
+
         print(f"Dealer final hand value: {self.dealer_hand.sum_hand(hard_sum_only=True)}")
 
     def generate_result_message(self, hand):
