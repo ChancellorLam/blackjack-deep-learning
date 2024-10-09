@@ -25,3 +25,7 @@ class CardCollection(ABC):
 
     def shuffle(self):
         random.shuffle(self.cards)
+
+    def transfer_all_cards_to(self, destination):
+        destination.extend(self.cards)
+        self.cards.clear()
