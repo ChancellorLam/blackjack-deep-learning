@@ -190,7 +190,7 @@ class BlackjackGame:
         decisions = ["Hit", "Stand"]
         if self.turn == 0:
             decisions.append("Double")
-            if self.player_hands[0].can_split():
+            if self.player_hands[i].can_split():
                 decisions.append("Split")
 
         specific_hand = ""
