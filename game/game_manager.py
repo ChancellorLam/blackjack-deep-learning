@@ -7,6 +7,7 @@ class GameManager:
         self.player_money = 500
         self.current_bet = 15
         self.game_deck = Deck()
+        self.blackjack_ratio = 3 / 2
 
     def load_game_deck_with_standard_decks(self, num_decks):
         self.game_deck.add_standard_decks(num_decks)
@@ -20,7 +21,7 @@ class GameManager:
             self.player_money = self.player_money - self.current_bet
             print(f"You now have: {self.player_money}\n")
             game = BlackjackGame(self.current_bet)
-            payouts, costs = game.play_single_blackjack_game(self.game_deck, (3 / 2))
+            payouts, costs = game.play_single_blackjack_game(self.game_deck, self.blackjack_ratio)
             for payout in payouts:
                 self.player_money = self.player_money + payout
             self.player_money = self.player_money + self.current_bet
