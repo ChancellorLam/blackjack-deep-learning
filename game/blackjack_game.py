@@ -16,6 +16,10 @@ class BlackjackGame:
         if any((dealer_has_blackjack, player_has_blackjack)):
             self.print_game_state(reveal_dealer_hand=True)
             time.sleep(2)
+
+            self.player_hands[0].transfer_all_cards_to(game_deck.used_cards)
+            self.dealer_hand.transfer_all_cards_to(game_deck.used_cards)
+
             if dealer_has_blackjack and player_has_blackjack:
                 print("Push!")
                 return [0], [0]
@@ -35,14 +39,19 @@ class BlackjackGame:
 
         if len(self.player_hands) == 1:
             print(self.generate_result_message(self.player_hands[0]))
-            return [self.get_game_result(self.player_hands[0])], [self.player_hands[0].bet]
+            payout = self.get_game_result(self.player_hands[0])
+            self.player_hands[0].transfer_all_cards_to(game_deck.used_cards)
+            self.dealer_hand.transfer_all_cards_to(game_deck.used_cards)
+            return [payout], [self.player_hands[0].bet]
 
         player_payouts = []
         costs = []
         for index, hand in enumerate(self.player_hands):
             print(f"Hand {index + 1}: {self.generate_result_message(hand)}")
             player_payouts.append(self.get_game_result(hand))
+            hand.transfer_all_cards_to(game_deck.used_cards)
             costs.append(hand.bet)
+        self.dealer_hand.transfer_all_cards_to(game_deck.used_cards)
         return player_payouts, costs
 
     def play_player_hand(self, hand, game_deck, i):
