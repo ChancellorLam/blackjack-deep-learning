@@ -25,7 +25,7 @@ class BlackjackGame:
                 return [0], [0]
             elif dealer_has_blackjack:
                 print("Dealer has Blackjack! You lose!")
-                return [self.player_hands[0].bet * -1], [0]
+                return [0], [self.player_hands[0].bet]
             elif player_has_blackjack:
                 print("Player Blackjack! You win!")
                 return [(self.player_hands[0].bet * blackjack_ratio)], [0]
