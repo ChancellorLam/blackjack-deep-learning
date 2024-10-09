@@ -76,6 +76,8 @@ class BlackjackGame:
                     print("Doubling...\n")
                     self.hit(hand, game_deck)
                     hand.double_bet()
+                    self.print_game_state(hand_index=i)
+                    time.sleep(2)
                     if hand.is_bust():
                         print("Bust! Dealer wins!")
                     player_still_playing = False
