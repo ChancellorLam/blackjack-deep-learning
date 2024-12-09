@@ -4,6 +4,15 @@ class Hand(CardCollection):
     def __init__(self, bet=None):
         super().__init__()
         self.bet = bet
+        self.doubled = False
+
+    def get_state_of_hand(self):
+        player_value = self.sum_hand(hard_sum_only=True)
+        if ('A' in [card.get_card() for card in self.cards]) and isinstance(self.sum_hand(), tuple):
+            has_usable_ace = 1
+        else:
+            has_usable_ace = 0
+        return player_value, has_usable_ace
 
     def sum_hand(self, hard_sum_only=False):
         hard_sum = 0
@@ -43,3 +52,4 @@ class Hand(CardCollection):
 
     def double_bet(self):
         self.bet = self.bet * 2
+        self.doubled = True

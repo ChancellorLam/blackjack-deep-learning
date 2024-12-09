@@ -1,6 +1,8 @@
 from blackjack_entities.deck import Deck
 from game.blackjack_game import BlackjackGame
 import random
+from machine_learning.q_learning.q_learning_agent import QLearningAgent
+from machine_learning.q_learning.q_learning_game import QLearningGame
 
 
 class GameManager:
@@ -39,4 +41,31 @@ class GameManager:
                 print("Reshuffling deck...\n")
                 self.game_deck.restore_used_cards()
                 self.game_deck.shuffle()
-                deck_penetration_shuffle_point = round(random.uniform(0.4, 0.6) * len(self.game_deck))
+                deck_penetration_shuffle_point = round( random.uniform(0.4, 0.6) * len(self.game_deck) )
+
+    def q_learning_blackjack(self):
+        self.load_game_deck_with_standard_decks(8)
+        deck_penetration_shuffle_point = round(random.uniform(0.4, 0.6) * len(self.game_deck))
+        self.game_deck.shuffle()
+        q_agent = QLearningAgent([1, 2, 3, 4])
+        for _ in range(0, 50):
+            self.player_money = 15000000
+            initial_iteration_balance = self.player_money
+
+            for __ in range(0, 1000000):
+                game = QLearningGame(self.current_bet, q_agent)
+                payouts, costs = game.q_play_single_blackjack_game(self.game_deck, self.blackjack_ratio)
+                for payout in payouts:
+                    self.player_money = self.player_money + payout
+                for cost in costs:
+                    self.player_money = self.player_money - cost
+                if len(self.game_deck.used_cards) >= deck_penetration_shuffle_point:
+                    self.game_deck.restore_used_cards()
+                    self.game_deck.shuffle()
+                    deck_penetration_shuffle_point = round(random.uniform(0.4, 0.6) * len(self.game_deck))
+
+            print(f"Starting Balance: {initial_iteration_balance}")
+            print(f"Balance After Iteration: {self.player_money}")
+            print(f"Percent Change: "
+                  f"{((self.player_money - initial_iteration_balance) / initial_iteration_balance) * 100}%\n")
+

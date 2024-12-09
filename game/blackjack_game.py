@@ -15,7 +15,7 @@ class BlackjackGame:
 
         if any((dealer_has_blackjack, player_has_blackjack)):
             self.print_game_state(reveal_dealer_hand=True)
-            time.sleep(2)
+            self.apply_delay(2)
 
             self.player_hands[0].transfer_all_cards_to(game_deck.used_cards)
             self.dealer_hand.transfer_all_cards_to(game_deck.used_cards)
@@ -61,10 +61,10 @@ class BlackjackGame:
             if hand.is_bust():
                 print("Bust! Dealer wins!")
                 player_still_playing = False
-                time.sleep(2)
+                self.apply_delay(2)
             elif hand.sum_hand(hard_sum_only=True) == 21:
                 player_still_playing = False
-                time.sleep(2)
+                self.apply_delay(2)
             else:
                 choice = self.get_player_choice(i)
                 if choice == 1:
@@ -77,7 +77,7 @@ class BlackjackGame:
                     self.hit(hand, game_deck)
                     hand.double_bet()
                     self.print_game_state(hand_index=i)
-                    time.sleep(2)
+                    self.apply_delay(2)
                     if hand.is_bust():
                         print("Bust! Dealer wins!")
                     player_still_playing = False
@@ -95,13 +95,13 @@ class BlackjackGame:
     def play_dealer_hand(self, game_deck):
         if self.dealer_hand.sum_hand(hard_sum_only=True) < 17:
             self.print_game_state(reveal_dealer_hand=True)
-            time.sleep(2)
+            self.apply_delay(2)
             while self.dealer_hand.sum_hand(hard_sum_only=True) < 17:
                 self.hit(self.dealer_hand, game_deck)
                 print(f"Dealer hits.")
                 self.print_game_state(reveal_dealer_hand=True)
                 if not self.dealer_hand.is_bust():
-                    time.sleep(2)
+                    self.apply_delay(2)
         elif self.dealer_hand.is_bust():
             print(f"Dealer busts!")
             self.print_game_state(reveal_dealer_hand=True)
@@ -202,3 +202,8 @@ class BlackjackGame:
 
         # Join decisions with commas and 'or' for the last item
         return f"{prompt}{', '.join(decisions[:-1])}, or {decisions[-1]}{specific_hand}?", decisions
+
+    @classmethod
+    def apply_delay(cls, duration, should_delay=True):
+        if should_delay:
+            time.sleep(duration)
